@@ -1,6 +1,5 @@
 import Recurso from "../models/Recurso.mjs";
 
-// Crear un nuevo recurso (Auditorio)
 export const crearRecurso = async (req, res) => {
     try {
         const { nombre, capacidad, ubicacion } = req.body;
@@ -17,7 +16,6 @@ export const crearRecurso = async (req, res) => {
     }
 };
 
-// Obtener todos los recursos
 export const obtenerRecursos = async (req, res) => {
     try {
         const recursos = await Recurso.find();
@@ -27,7 +25,6 @@ export const obtenerRecursos = async (req, res) => {
     }
 };
 
-// Obtener un recurso por su ID
 export const obtenerRecursoPorId = async (req, res) => {
     try {
         const { id } = req.params;

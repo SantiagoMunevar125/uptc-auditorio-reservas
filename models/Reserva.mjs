@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const reservaSchema = new mongoose.Schema({
     recurso: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Recurso", // Relacionamos esta reserva con el modelo "Recurso"
+        ref: "Recurso", 
         required: [true, "Debe especificar qué recurso desea reservar"]
     },
     fecha: {
-        type: String, // Usamos String formato "YYYY-MM-DD" para facilitar la validación exacta
+        type: String,
         required: [true, "La fecha de reserva es obligatoria"]
     },
     horaInicio: {

@@ -4,13 +4,13 @@ const recursoSchema = new mongoose.Schema({
     nombre: {
         type: String,
         required: [true, "El nombre del auditorio o espacio es obligatorio"],
-        unique: true, // Constraint: No pueden existir dos auditorios con el mismo nombre
+        unique: true,
         trim: true
     },
     capacidad: {
         type: Number,
         required: [true, "La capacidad es obligatoria"],
-        min: [1, "La capacidad debe ser de al menos 1 persona"] // Constraint: Mínimo lógico
+        min: [1, "La capacidad debe ser de al menos 1 persona"] 
     },
     ubicacion: {
         type: String,
@@ -18,7 +18,7 @@ const recursoSchema = new mongoose.Schema({
         trim: true
     }
 }, {
-    timestamps: true // Agrega automáticamente fecha de creación y actualización
+    timestamps: true
 });
 
 export default mongoose.model("Recurso", recursoSchema);
