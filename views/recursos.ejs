@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Recursos - UPTC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <a href="/" class="btn btn-secondary mb-3">⬅ Volver al Menú</a>
+        <h2 class="mb-4">Gestión de Recursos (Auditorios)</h2>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">Registrar Nuevo Auditorio</div>
+            <div class="card-body">
+                <form id="formRecurso">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Nombre del Auditorio</label>
+                            <input type="text" id="nombre" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Capacidad (Personas)</label>
+                            <input type="number" id="capacidad" class="form-control" min="1" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Ubicación</label>
+                            <input type="text" id="ubicacion" class="form-control" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Guardar Recurso</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-dark text-white">Auditorios Disponibles</div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID (Automático)</th>
+                            <th>Nombre</th>
+                            <th>Capacidad</th>
+                            <th>Ubicación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaRecursos">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para cargar los recursos desde el backend
+        const cargarRecursos = async () => {
+            try {
+                const respuesta = await fetch('/recursos');
+                const recursos = await respuesta.json();
+                
+                const tbody = document.getElementById('tablaRecursos');
+                tbody.innerHTML = ''; // Limpiar tabla
+                
+                recursos.forEach(recurso => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${recurso._id}</td>
+                            <td>${recurso.nombre}</td>
+                            <td>${recurso.capacidad}</td>
+                            <td>${recurso.ubicacion}</td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error al cargar recursos:', error);
+            }
+        };
+
+        // Función para guardar un nuevo recurso
+        document.getElementById('formRecurso').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Evita que la página se recargue
+            
+            const nuevoRecurso = {
+                nombre: document.getElementById('nombre').value,
+                capacidad: document.getElementById('capacidad').value,
+                ubicacion: document.getElementById('ubicacion').value
+            };
+
+            try {
+                const respuesta = await fetch('/recursos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(nuevoRecurso)
+                });
+
+                if (respuesta.ok) {
+                    alert('Recurso creado exitosamente');
+                    document.getElementById('formRecurso').reset(); // Limpiar formulario
+                    cargarRecursos(); // Recargar la tabla
+                } else {
+                    const error = await respuesta.json();
+                    alert('Error: ' + error.mensaje);
+                }
+            } catch (error) {
+                console.error('Error al guardar:', error);
+            }
+        });
+
+        // Cargar los recursos apenas se abra la página
+        cargarRecursos();
+    </script>
+</body>
+</html>
